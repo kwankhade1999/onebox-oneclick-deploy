@@ -1,0 +1,93 @@
+# -----------------------------
+# Node
+# -----------------------------
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Environment Variables
+.env
+.env.*
+!.env.example
+
+# Logs
+logs/
+*.log
+*.log.*
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage
+coverage/
+*.lcov
+
+# Build output
+dist/
+build/
+out/
+.tmp/
+temp/
+
+# TypeScript
+*.tsbuildinfo
+
+# PM2
+.pmid/**
+pm2.log
+.pm2/
+
+# -----------------------------
+# IDE / Editor Files
+# -----------------------------
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# -----------------------------
+# Docker
+# -----------------------------
+docker-data/
+docker-compose.override.yml
+*.tar
+
+# -----------------------------
+# Elasticsearch / Data Files
+# -----------------------------
+esdata/
+elasticsearch-data/
+data/
+.elastic/
+
+# -----------------------------
+# Qdrant / Vector DB
+# -----------------------------
+qdrant_data/
+
+# -----------------------------
+# Frontend (React / Vite)
+# -----------------------------
+**/node_modules/
+**/dist/
+**/build/
+*.cache/
+*.parcel-cache/
+*.eslintcache
+
+# Local dev artifacts
+*.local
+*.bak
+
+# Testing
+jest-cache/
+jest-results.json
+test-results/
