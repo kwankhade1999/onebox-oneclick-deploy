@@ -1,0 +1,492 @@
+{
+	"info": {
+		"_postman_id": "b6803137-9642-46e6-bf50-ac00b4a1bdfe",
+		"name": "OneBox",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "29988372"
+	},
+	"item": [
+		{
+			"name": "Add Accounts",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\":\"work1\",\r\n    \"host\":\"imap.gmail.com\",\r\n    \"port\":993,\r\n    \"secure\":true,\r\n    \"user\":\"pranay.mahalle2000222@gmail.com\",\r\n    \"pass\":\"fclq inis qduy pgrr\"\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/accounts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"accounts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ES health",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200"
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search by Sender",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"query\": {\r\n      \"term\": {\r\n    \"from\": \"pranay@wootag.com\"\r\n      }\r\n  }\r\n}\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/emails/_search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"emails",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search on ES",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"query\": {\r\n    \"term\": {\r\n      \"accountId\": \"work1\"\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/emails/_search",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"emails",
+						"_search"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "ES pretty",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"query\": {\r\n      \"match\": { \"category\": \"Not Interested\" }\r\n    }\r\n  }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/emails/_search?pretty",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"emails",
+						"_search"
+					],
+					"query": [
+						{
+							"key": "pretty",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Filters",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/search?folder=INBOX&accountId=work4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"search"
+					],
+					"query": [
+						{
+							"key": "folder",
+							"value": "INBOX"
+						},
+						{
+							"key": "category",
+							"value": "Interested",
+							"disabled": true
+						},
+						{
+							"key": "accountId",
+							"value": "work4"
+						},
+						{
+							"key": "page",
+							"value": "1",
+							"disabled": true
+						},
+						{
+							"key": "size",
+							"value": "20",
+							"disabled": true
+						},
+						{
+							"key": "from",
+							"value": "",
+							"disabled": true
+						},
+						{
+							"key": "q",
+							"value": "",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Ai Categorize Suggestion",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"subject\": \"Hi there dear, do you recieved my\",\r\n  \"text\": \"Packaging\"\r\n}\r\n\r\n// Uncomment the following sample email to test OpenAI's \"Interested\" classification\r\n\r\n// {\r\n//   \"subject\": \"Quick chat about pricing\",\r\n//   \"text\": \"I want to see a demo and schedule a call.\"\r\n// }",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/ai/categorize",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"ai",
+						"categorize"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "schema of es index",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"properties\": {\r\n    \"category\": { \"type\": \"keyword\" }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/emails/_mapping",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"emails",
+						"_mapping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Test Slack WebHook",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"text\":\"HEyyy therer are you ok\"}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://hooks.slack.com/services/put_your_webhookURL_here",
+					"protocol": "https",
+					"host": [
+						"hooks",
+						"slack",
+						"com"
+					],
+					"path": [
+						"services",
+						"put_your_webhookURL_here"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Search by Api",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "from",
+							"value": "pranay@wootag.com",
+							"type": "text",
+							"disabled": true
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:3000/api/search?from=pranay@wootag.com&accountId=work2",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"search"
+					],
+					"query": [
+						{
+							"key": "q",
+							"value": "meeting",
+							"disabled": true
+						},
+						{
+							"key": "from",
+							"value": "pranay@wootag.com"
+						},
+						{
+							"key": "folder",
+							"value": "INBOX",
+							"disabled": true
+						},
+						{
+							"key": "accountId",
+							"value": "work2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get ES Structure",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200/emails/_mapping",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"emails",
+						"_mapping"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RAG Test",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:6333/collections",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "6333",
+					"path": [
+						"collections"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "RAG LLM suggest-reply",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/reply/<TJREeXMqaN6Kp3nS_fwnww@notifications.google.com>__INBOX/suggest-reply",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"reply",
+						"<TJREeXMqaN6Kp3nS_fwnww@notifications.google.com>__INBOX",
+						"suggest-reply"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Account count",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/api/status",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"api",
+						"status"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Trucate ES",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9200/emails",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"emails"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Again Put Data Structure in ES",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"mappings\": {\r\n    \"properties\": {\r\n      \"subject\": { \"type\": \"text\" },\r\n      \"text\": { \"type\": \"text\" },\r\n      \"from\": { \"type\": \"keyword\" },\r\n      \"folder\": { \"type\": \"keyword\" },\r\n      \"accountId\": { \"type\": \"keyword\" },\r\n      \"category\": { \"type\": \"keyword\" },\r\n      \"date\": { \"type\": \"date\" }\r\n    }\r\n  }\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:9200/emails",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9200",
+					"path": [
+						"emails"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
