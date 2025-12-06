@@ -191,37 +191,12 @@ src/
 
 ---
 
-## 👨‍💻 6. For Interviewers – What This Project Shows
-
-### You demonstrate:
-- Event-driven architecture  
-- Real-time streams + IMAP idle  
-- AI integration (classification + generative replies)  
-- Search engine design  
-- Microservices‑friendly structure  
-- Production‑grade folder structuring  
-
----
-
 ## 🚀 7. Future Enhancements
 - Multi-folder sync  
 - Batch processing  
 - Template editor UI  
 - AI training dashboards  
 - OAuth IMAP login (Gmail/Outlook)
-
----
-
-## 🏁 8. Conclusion
-
-This project is structured to showcase:
-- **Backend engineering**
-- **System design**
-- **AI integration**
-- **Clean architecture**
-- **Production readiness**
-
-Perfect for **interviews**, **showcase**, and **portfolio demonstration**.
 
 ---
 
