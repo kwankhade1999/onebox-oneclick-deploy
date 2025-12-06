@@ -1,0 +1,43 @@
+{
+  "info": {
+    "_postman_id": "cf403159-9f25-4055-ad82-14c71d286af4",
+    "name": "OneBox",
+    "description": "# Introduction\nWhat does your API do?\n\n# Overview\nThings that the developers should know about\n\n# Authentication\nWhat is the preferred way of using the API?\n\n# Error Codes\nWhat errors and status codes can a user expect?\n\n# Rate limit\nIs there a limit to the number of requests a user can send?",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "http://localhost:3000/api/search?category=Interested&accountId=work1",
+      "id": "ca82a296-5a88-4f5e-9c5e-bf94943e8747",
+      "request": {
+        "method": "GET",
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "http://localhost:3000/api/search?category=Interested&accountId=work1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "3000",
+          "path": [
+            "api",
+            "search"
+          ],
+          "query": [
+            {
+              "key": "category",
+              "value": "Interested"
+            },
+            {
+              "key": "accountId",
+              "value": "work1"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
