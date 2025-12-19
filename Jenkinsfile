@@ -16,7 +16,7 @@ pipeline {
 
     stage('Terraform Init') {
       steps {
-        dir('terraform') {
+        dir('infra') {
           sh 'terraform init'
         }
       }
@@ -24,7 +24,7 @@ pipeline {
 
     stage('Terraform Apply') {
       steps {
-        dir('terraform') {
+        dir('infra') {
           sh 'terraform apply -auto-approve'
         }
       }
@@ -32,7 +32,7 @@ pipeline {
 
     stage('Generate Inventory') {
       steps {
-        dir('terraform') {
+        dir('infra') {
           sh '''
             terraform output -raw inventory > ../ansible/inventory.ini
           '''
