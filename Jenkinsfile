@@ -32,7 +32,7 @@ pipeline {
 
     stage('Ansible Deploy') {
       steps {
-        dir('infra/ansible') {
+        dir('ansible') {
           sh '''
             ansible-playbook \
               -i inventory.ini \
