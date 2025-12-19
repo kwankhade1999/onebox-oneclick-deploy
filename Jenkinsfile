@@ -30,21 +30,21 @@ pipeline {
       }
     }
 
-
-
-  stage('Ansible Deploy') {
-  steps {
-    dir('infra/ansible') {
-      sh '''
-        ansible-playbook \
-          -i inventory.ini \
-          site.yml \
-          --private-key=/var/lib/jenkins/.ssh/onebox.pem \
-          --ssh-common-args='-o StrictHostKeyChecking=no'
-      '''
+    stage('Ansible Deploy') {
+      steps {
+        dir('infra/ansible') {
+          sh '''
+            ansible-playbook \
+              -i inventory.ini \
+              site.yml \
+              --private-key=/var/lib/jenkins/.ssh/onebox.pem \
+              --ssh-common-args='-o StrictHostKeyChecking=no'
+          '''
+        }
+      }
     }
+
   }
-}
 
   post {
     success {
