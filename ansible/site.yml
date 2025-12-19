@@ -1,0 +1,153 @@
+---
+# ========================
+# Frontend EC2
+# ========================
+- name: Configure Frontend EC2
+  hosts: frontend
+  become: yes
+  tasks:
+    - name: Install Docker
+      apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        update_cache: yes
+        state: present
+
+    - name: Add ubuntu to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Copy frontend compose file
+      copy:
+        src: ../docker-compose-frontend.yml
+        dest: /home/ubuntu/docker-compose.yml
+        owner: ubuntu
+        group: ubuntu
+
+    - name: Run frontend container
+      become_user: ubuntu
+      shell: docker compose up -d
+      args:
+        chdir: /home/ubuntu
+
+# ========================
+# Elasticsearch EC2
+# ========================
+- name: Configure Elasticsearch EC2
+  hosts: elasticsearch
+  become: yes
+  tasks:
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Docker prerequisites
+      apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+        state: present
+
+    - name: Add Docker GPG key
+      shell: |
+        install -m 0755 -d /etc/apt/keyrings
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+        gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+      args:
+        creates: /etc/apt/keyrings/docker.gpg
+
+    - name: Add Docker repository
+      copy:
+        dest: /etc/apt/sources.list.d/docker.list
+        content: |
+          deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu noble stable
+
+    - name: Install Docker
+      apt:
+        name:
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        update_cache: yes
+        state: present
+
+    - name: Add ubuntu to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Copy Elasticsearch compose file
+      copy:
+        src: ../docker-compose-elasticsearch.yml
+        dest: /home/ubuntu/docker-compose.yml
+        owner: ubuntu
+        group: ubuntu
+
+    - name: Run Elasticsearch container
+      become_user: ubuntu
+      shell: docker compose up -d
+      args:
+        chdir: /home/ubuntu
+        
+# ========================
+# Backend EC2
+# ========================
+- name: Configure Backend EC2
+  hosts: backend
+  become: yes
+  vars:
+    elasticsearch_private_ip: "{{ hostvars['elasticsearch']['ansible_host'] }}"
+  tasks:
+    - name: Install Docker
+      apt:
+        name:
+          - ca-certificates
+          - curl
+          - gnupg
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        update_cache: yes
+        state: present
+
+    - name: Add ubuntu to docker group
+      user:
+        name: ubuntu
+        groups: docker
+        append: yes
+
+    - name: Copy backend compose file
+      copy:
+        src: ../docker-compose-backend.yml
+        dest: /home/ubuntu/docker-compose.yml
+        owner: ubuntu
+        group: ubuntu
+
+    - name: Create backend env file
+      copy:
+        dest: /home/ubuntu/.env
+        content: |
+          ELASTICSEARCH_HOST={{ elasticsearch_private_ip }}
+        owner: ubuntu
+        group: ubuntu
+
+    - name: Run backend containers
+      become_user: ubuntu
+      shell: docker compose --env-file .env up -d
+      args:
+        chdir: /home/ubuntu

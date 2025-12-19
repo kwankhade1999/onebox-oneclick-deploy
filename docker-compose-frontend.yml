@@ -1,0 +1,8 @@
+services:
+  frontend:
+    image: kunalwankhade/onebox-frontend:latest
+    container_name: onebox-frontend
+    ports:
+      - "80:80"
+    restart: always
+
