@@ -149,12 +149,35 @@
   vars:
     elasticsearch_private_ip: "{{ hostvars['elasticsearch']['ansible_host'] }}"
   tasks:
-    - name: Install Docker
+    - name: Update apt cache
+      apt:
+        update_cache: yes
+
+    - name: Install Docker prerequisites
       apt:
         name:
           - ca-certificates
           - curl
           - gnupg
+        state: present
+
+    - name: Add Docker GPG key
+      shell: |
+        install -m 0755 -d /etc/apt/keyrings
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \
+        gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+      args:
+        creates: /etc/apt/keyrings/docker.gpg
+
+    - name: Add Docker repository
+      copy:
+        dest: /etc/apt/sources.list.d/docker.list
+        content: |
+          deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu noble stable
+
+    - name: Install Docker
+      apt:
+        name:
           - docker-ce
           - docker-ce-cli
           - containerd.io
@@ -162,6 +185,7 @@
           - docker-compose-plugin
         update_cache: yes
         state: present
+       
 
     - name: Add ubuntu to docker group
       user:
@@ -184,8 +208,15 @@
         owner: ubuntu
         group: ubuntu
 
+    - name: Ensure Docker is running
+      become: true
+      service:
+          name: docker
+          state: started
+          enabled: true
+
     - name: Run backend containers
-      become_user: ubuntu
+      become: true
       shell: docker compose --env-file .env up -d
       args:
         chdir: /home/ubuntu
