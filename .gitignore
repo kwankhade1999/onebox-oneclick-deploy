@@ -92,6 +92,8 @@ jest-cache/
 jest-results.json
 test-results/
 
+
+
 # Terraform
 .terraform/
 *.tfstate
@@ -100,3 +102,9 @@ test-results/
 # SSH / Keys
 *.pem
 .ssh/
+
+# Editor
+.vscode/
+
+# Env
+.env
