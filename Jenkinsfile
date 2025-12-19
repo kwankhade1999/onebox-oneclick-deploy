@@ -37,7 +37,7 @@ pipeline {
             ansible-playbook \
               -i inventory.ini \
               site.yml \
-              --private-key=/var/lib/jenkins/.ssh/onebox.pem \
+              --private-key=/var/lib/jenkins/.ssh/test1.pem \
               --ssh-common-args='-o StrictHostKeyChecking=no'
           '''
         }
