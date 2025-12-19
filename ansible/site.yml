@@ -55,9 +55,16 @@
         dest: /home/ubuntu/docker-compose.yml
         owner: ubuntu
         group: ubuntu
+        
+    - name: Ensure Docker is running
+      become: true
+      service:
+          name: docker
+          state: started
+          enabled: true
 
     - name: Run frontend container
-      become_user: ubuntu
+      become: true
       shell: docker compose up -d
       args:
         chdir: /home/ubuntu
