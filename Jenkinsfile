@@ -32,7 +32,7 @@ pipeline {
 
 
 
- tage('Ansible Deploy') {
+  stage('Ansible Deploy') {
   steps {
     dir('infra/ansible') {
       sh '''
