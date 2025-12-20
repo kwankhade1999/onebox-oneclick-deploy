@@ -1,13 +1,40 @@
 pipeline {
   agent any
 
+  parameters {
+    booleanParam(
+      name: 'DEPLOY',
+      defaultValue: true,
+      description: 'Create infrastructure and deploy OneBox'
+    )
+    booleanParam(
+      name: 'DESTROY',
+      defaultValue: false,
+      description: 'Destroy all infrastructure'
+    )
+  }
+
   environment {
     AWS_DEFAULT_REGION = "eu-north-1"
   }
 
   stages {
 
+    stage('Validate Parameters') {
+      steps {
+        script {
+          if (params.DEPLOY && params.DESTROY) {
+            error "❌ Both DEPLOY and DESTROY cannot be true at the same time"
+          }
+          if (!params.DEPLOY && !params.DESTROY) {
+            error "❌ Select at least one option: DEPLOY or DESTROY"
+          }
+        }
+      }
+    }
+
     stage('Checkout Code') {
+      when { expression { params.DEPLOY || params.DESTROY } }
       steps {
         git branch: 'main',
             url: 'https://github.com/kwankhade1999/onebox-oneclick-deploy.git'
@@ -15,6 +42,7 @@ pipeline {
     }
 
     stage('Terraform Init') {
+      when { expression { params.DEPLOY || params.DESTROY } }
       steps {
         dir('infra') {
           sh 'terraform init'
@@ -23,6 +51,7 @@ pipeline {
     }
 
     stage('Terraform Apply') {
+      when { expression { params.DEPLOY } }
       steps {
         dir('infra') {
           sh 'terraform apply -auto-approve'
@@ -31,6 +60,7 @@ pipeline {
     }
 
     stage('Ansible Deploy') {
+      when { expression { params.DEPLOY } }
       steps {
         dir('ansible') {
           sh '''
@@ -44,14 +74,22 @@ pipeline {
       }
     }
 
+    stage('Terraform Destroy') {
+      when { expression { params.DESTROY } }
+      steps {
+        dir('infra') {
+          sh 'terraform destroy -auto-approve'
+        }
+      }
+    }
   }
 
   post {
     success {
-      echo "✅ OneBox deployed successfully"
+      echo "✅ Pipeline completed successfully"
     }
     failure {
-      echo "❌ Deployment failed"
+      echo "❌ Pipeline failed"
     }
   }
 }
