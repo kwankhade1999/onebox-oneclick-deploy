@@ -24,5 +24,5 @@ variable "backend_instance_type" {
 variable "elasticsearch_instance_type" {
   description = "EC2 instance type for Elasticsearch"
   type        = string
-  default     = "t3.micro"
+  default     = "t3.small"
 }
